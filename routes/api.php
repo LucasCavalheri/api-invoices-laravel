@@ -18,4 +18,3 @@ Route::prefix('/invoices')->group(function () {
     Route::put('/{id}', [InvoiceController::class, 'update']);
     Route::delete('/{id}', [InvoiceController::class, 'destroy']);
 });
-    
