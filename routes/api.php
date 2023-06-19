@@ -1,8 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\InvoiceController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
+
+// Auth //
+Route::prefix('/auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'register']);
+});
 
 // Users //
 Route::prefix('/users')->group(function () {
@@ -11,7 +18,7 @@ Route::prefix('/users')->group(function () {
 });
 
 // Invoices //
-Route::prefix('/invoices')->group(function () {
+Route::middleware('auth:sanctum')->prefix('/invoices')->group(function () {
     Route::get('/', [InvoiceController::class, 'index']);
     Route::get('/{id}', [InvoiceController::class, 'show']);
     Route::post('/', [InvoiceController::class, 'store']);

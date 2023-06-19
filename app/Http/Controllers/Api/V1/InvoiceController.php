@@ -14,16 +14,16 @@ class InvoiceController extends Controller
 {
     use HttpResponses;
 
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->only(['store', 'update', 'destroy']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        // return InvoiceResource::collection(Invoice::where([
-        //     ['value', '>', 5000],
-        //     ['paid', '=', 1],
-        // ])->with('user')->paginate(10));
-        // return InvoiceResource::collection(Invoice::with('user')->get());
         return (new Invoice())->filter($request);
     }
 
@@ -32,6 +32,10 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        if (!auth()->user()->tokenCan('invoice-store')) {
+            return $this->error('Você não tem autorização para criar este invoice', 403);
+        }
+
         $invoiceRequest = new InvoiceRequest();
 
         $validator = Validator::make($request->all(), $invoiceRequest->rules());
@@ -68,6 +72,10 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!auth()->user()->tokenCan('invoice-update')) {
+            return $this->error('Você não tem autorização para atualizar este invoice', 403);
+        }
+
         $invoiceRequest = new InvoiceRequest();
 
         $validator = Validator::make($request->all(), $invoiceRequest->rules());
@@ -102,6 +110,10 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
+        if (!auth()->user()->tokenCan('invoice-delete')) {
+            return $this->error('Você não tem autorização para deletar este invoice', 403);
+        }
+
         $invoice = Invoice::find($id);
 
         if (!$invoice) {
