@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 // Auth //
 Route::prefix('/auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/logout', [AuthController::class, 'register']);
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
 // Users //
@@ -18,7 +18,7 @@ Route::prefix('/users')->group(function () {
 });
 
 // Invoices //
-Route::middleware('auth:sanctum')->prefix('/invoices')->group(function () {
+Route::prefix('/invoices')->group(function () {
     Route::get('/', [InvoiceController::class, 'index']);
     Route::get('/{id}', [InvoiceController::class, 'show']);
     Route::post('/', [InvoiceController::class, 'store']);

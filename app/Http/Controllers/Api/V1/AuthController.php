@@ -14,16 +14,19 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         if (!Auth::attempt($request->only('email', 'password'))) {
-            return $this->response('Unauthorized', 401);
+            return $this->response('Email or Password invalid', 401);
         }
 
         return $this->response('Authorized', 200, [
-            'token' => $request->user()->createToken('token', ['invoice-store', 'invoice-update', 'invoice-delete'])->plainTextToken,
+            'token' => $request->user()->createToken('token')->plainTextToken,
         ]);
 
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        $request->user()->currentAccessToken()->delete();
+
+        return $this->response('Logged out', 200);
     }
 }
