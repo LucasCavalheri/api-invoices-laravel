@@ -30,7 +30,15 @@ class InvoiceController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $invoice = Invoice::with('user')->where('id', $id)->first();
+
+        if (!$invoice) {
+            return response()->json([
+                'message' => 'Invoice not found',
+            ], 404);
+        };
+
+        return new InvoiceResource($invoice);
     }
 
     /**

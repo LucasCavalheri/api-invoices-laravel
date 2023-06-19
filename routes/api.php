@@ -14,4 +14,5 @@ Route::prefix('/users')->group(function () {
 Route::prefix('/invoices')->group(function () {
     Route::get('/', [InvoiceController::class, 'index']);
     Route::get('/{id}', [InvoiceController::class, 'show']);
+    Route::post('/', [InvoiceController::class, 'store']);
 });
