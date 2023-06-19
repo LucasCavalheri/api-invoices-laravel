@@ -32,9 +32,9 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        if (!auth()->user()->tokenCan('invoice-store')) {
-            return $this->error('Você não tem autorização para criar este invoice', 403);
-        }
+        // if (!auth()->user()->tokenCan('invoice-store')) {
+        //     return $this->error('Você não tem autorização para criar este invoice', 403);
+        // }
 
         $invoiceRequest = new InvoiceRequest();
 
@@ -47,10 +47,10 @@ class InvoiceController extends Controller
         $invoice = Invoice::create($validator->validated());
 
         if (!$invoice) {
-            return $this->error('Fatura não foi criada', 500);
+            return $this->error('Invoice não foi criado', 500);
         }
 
-        return $this->response('Fatura criada com sucesso', 201, new InvoiceResource($invoice->load('user')));
+        return $this->response('Invoice criado com sucesso', 201, new InvoiceResource($invoice->load('user')));
     }
 
     /**
@@ -72,37 +72,36 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        if (!auth()->user()->tokenCan('invoice-update')) {
-            return $this->error('Você não tem autorização para atualizar este invoice', 403);
-        }
+        // if (!auth()->user()->tokenCan('invoice-update')) {
+        //     return $this->error('Você não tem autorização para atualizar este invoice', 403);
+        // }
 
-        $invoiceRequest = new InvoiceRequest();
+        try {
+            $invoiceRequest = new InvoiceRequest();
 
-        $validator = Validator::make($request->all(), $invoiceRequest->rules());
+            $validator = Validator::make($request->all(), $invoiceRequest->rules());
 
-        if ($validator->fails()) {
-            return $this->error('Erro de validação', 422, $validator->errors());
-        }
+            if ($validator->fails()) {
+                return $this->error('Erro de validação', 422, $validator->errors());
+            }
 
-        $invoice = Invoice::find($id);
+            $invoice = Invoice::find($id);
 
-        if (!$invoice) {
-            return $this->error('Invoice não encontrado', 404);
-        }
+            if (!$invoice) {
+                return $this->error('Invoice não encontrado', 404);
+            }
 
-        $validated = $validator->validated();
+            $validated = $validator->validated();
 
-        if (isset($validated['paid']) && !$validated['paid']) {
-            $validated['payment_date'] = null;
-        }
+            if (isset($validated['paid']) && !$validated['paid']) {
+                $validated['payment_date'] = null;
+            }
+            $invoice->update($validated);
 
-        $updated = $invoice->update($validated);
-
-        if (!$updated) {
+            return $this->response('Invoice atualizado com sucesso', 200, new InvoiceResource($invoice->load('user')));
+        } catch (\Exception $err) {
             return $this->error('Invoice não foi atualizado', 500);
         }
-
-        return $this->response('Invoice atualizado com sucesso', 200, new InvoiceResource($invoice->load('user')));
     }
 
     /**
@@ -110,9 +109,9 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        if (!auth()->user()->tokenCan('invoice-delete')) {
-            return $this->error('Você não tem autorização para deletar este invoice', 403);
-        }
+        // if (!auth()->user()->tokenCan('invoice-delete')) {
+        //     return $this->error('Você não tem autorização para deletar este invoice', 403);
+        // }
 
         $invoice = Invoice::find($id);
 
