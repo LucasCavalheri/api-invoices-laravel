@@ -52,9 +52,7 @@ class InvoiceController extends Controller
         $invoice = Invoice::with('user')->where('id', $id)->first();
 
         if (!$invoice) {
-            return response()->json([
-                'message' => 'Invoice not found',
-            ], 404);
+            return $this->error('Invoice não encontrado', 404);
         };
 
         return new InvoiceResource($invoice);
@@ -65,7 +63,33 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $invoiceRequest = new InvoiceRequest();
+
+        $validator = Validator::make($request->all(), $invoiceRequest->rules());
+
+        if ($validator->fails()) {
+            return $this->error('Erro de validação', 422, $validator->errors());
+        }
+
+        $invoice = Invoice::find($id);
+
+        if (!$invoice) {
+            return $this->error('Invoice não encontrado', 404);
+        }
+
+        $validated = $validator->validated();
+
+        if (isset($validated['paid']) && !$validated['paid']) {
+            $validated['payment_date'] = null;
+        }
+
+        $updated = $invoice->update($validated);
+
+        if (!$updated) {
+            return $this->error('Invoice não foi atualizado', 500);
+        }
+
+        return $this->response('Invoice atualizado com sucesso', 200, new InvoiceResource($invoice->load('user')));
     }
 
     /**
@@ -73,6 +97,18 @@ class InvoiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $invoice = Invoice::find($id);
+
+        if (!$invoice) {
+            return $this->error('Invoice não encontrado', 404);
+        }
+
+        $deleted = $invoice->delete();
+
+        if (!$deleted) {
+            return $this->error('Invoice não foi deletado', 500);
+        }
+
+        return $this->response('Invoice deletado com sucesso', 200);
     }
 }

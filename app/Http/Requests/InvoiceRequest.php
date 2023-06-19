@@ -23,9 +23,9 @@ class InvoiceRequest extends FormRequest
     {
         return [
             'user_id' => 'required',
-            'type' => 'required|max:1',
+            'type' => 'required|max:1|in:C,B,P',
             'paid' => 'required|numeric|between:0,1',
-            'payment_date' => 'nullable',
+            'payment_date' => 'nullable|date_format:Y-m-d H:i:s',
             'value' => 'required|numeric',
         ];
     }
