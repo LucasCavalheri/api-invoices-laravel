@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class InvoiceController extends Controller
 {
+    use HttpResponses;
+
     /**
      * Display a listing of the resource.
      */
@@ -22,7 +27,21 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $invoiceRequest = new InvoiceRequest();
+
+        $validator = Validator::make($request->all(), $invoiceRequest->rules());
+
+        if ($validator->fails()) {
+            return $this->error('Erro de validação', 422, $validator->errors());
+        }
+
+        $invoice = Invoice::create($validator->validated());
+
+        if (!$invoice) {
+            return $this->error('Fatura não foi criada', 500);
+        }
+
+        return $this->response('Fatura criada com sucesso', 201, new InvoiceResource($invoice->load('user')));
     }
 
     /**
