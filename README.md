@@ -10,7 +10,7 @@
 
 ## 🧪 Testes
 
-![example workflow](https://github.com/LucasCavalheri/api-completa-laravel-10/actions/workflows/laravel.yml/badge.svg)
+<a href="https://github.com/LucasCavalheri/api-completa-laravel-10/actions/workflows/laravel.yml">![Workflow de LucasCavalheri](https://github.com/LucasCavalheri/api-completa-laravel-10/actions/workflows/laravel.yml/badge.svg)</a>
 
 ## 🖥️ Tecnologias
 
