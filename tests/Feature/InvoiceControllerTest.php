@@ -3,18 +3,22 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\Api\V1\InvoiceController;
-use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use Mockery;
 use Tests\TestCase;
 
 class InvoiceControllerTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        Mockery::close();
+    }
+
     public function testIndex()
     {
         $request = new Request();
