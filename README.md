@@ -8,21 +8,27 @@
 
 <br /><hr /><br />
 
+## 🧪 Testes
+
+![example workflow](https://github.com/LucasCavalheri/api-completa-laravel-10/actions/workflows/laravel.yml/badge.svg)
+
 ## 🖥️ Tecnologias
+
 Este projeto foi desenvolvido usando as seguintes tecnologias:
 
--  **PHP** como linguagem;
--  **SQLite e EloquentORM** para criação e gerenciamento do banco de dados;
--  **Laravel Sanctum** para validação e segurança de rotas;
--  **PHPUnit** para testes automatizados;
--  **Git** para versionamento de código;
--  **Visual Studio Code** para edição de código.
+-   **PHP** como linguagem;
+-   **SQLite e EloquentORM** para criação e gerenciamento do banco de dados;
+-   **Laravel Sanctum** para validação e segurança de rotas;
+-   **PHPUnit** para testes automatizados;
+-   **Git** para versionamento de código;
+-   **Visual Studio Code** para edição de código.
 
 ## ℹ️ Como usar
+
 Para testar este projeto, precisará das seguintes ferramentas instaladas:
 
-- PHP
-- Git
+-   PHP
+-   Git
 
 <br/>
 
